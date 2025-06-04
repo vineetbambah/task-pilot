@@ -22,7 +22,7 @@ const TaskBoard = () => {
                         status: "Done",
                         priority: "High",
                         creationDate: new Date(),
-                        dueDate: "2023-10-31",
+                        dueDate: "2026-10-01",
                     }}
                 />
             </div>

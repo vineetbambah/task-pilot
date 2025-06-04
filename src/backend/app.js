@@ -1,0 +1,62 @@
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
+const cors = require('cors');
+const app = express();
+const prisma = new PrismaClient();
+app.use(cors());
+app.use(express.json());
+const port = process.env.PORT || 3000;
+
+
+app.post('/api/post', async (req, res) => {
+  try {
+    const { title, status,description,priority,dueDate } = req.body;
+    const post = await prisma.task.create({
+      data: {
+        title,
+        status,
+        description,
+        priority,
+        dueDate: new Date(dueDate), 
+        createdAt: new Date(),
+      },
+    });
+    res.status(201).json(post);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while creating your task'});
+  }
+});
+app.put('/api/update/:id', async (req, res) => {
+  try {
+    const { title, status, description, priority, dueDate } = req.body;
+    const updatedTask = await prisma.task.update({
+      where: {
+        id: req.params.id
+      },
+      data: {
+        title,
+        status,
+        description,
+        priority,
+        dueDate: new Date(dueDate),
+      },
+    });
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating the task' });
+  }
+});
+app.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await prisma.task.findMany();
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while fetching tasks' });
+  }
+});
+app.listen(port, (req, res) => {
+  console.log(`Server is running on port ${port}`);
+});

@@ -1,104 +1,64 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-
-type TaskStatus = "To Do" | "In Progress" | "Done";
-type TaskPriority = "Low" | "Medium" | "High";
-
-interface TaskEditFormProps {
-  onCancel: () => void;
-  onSave: (data: { status: TaskStatus; priority: TaskPriority }) => void;
-}
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const formSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
   status: z.enum(["To Do", "In Progress", "Done"]),
   priority: z.enum(["Low", "Medium", "High"]),
-});
+  dueDate: z.date().optional(),
+})
 
-export const TaskEditForm: React.FC<TaskEditFormProps> = ({
-  onCancel,
-  onSave,
-}) => {
-  const form = useForm({
+type FormData = z.infer<typeof formSchema>
+
+export default function TaskForm({ onSubmit }: { onSubmit: () => void }) {
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-  });
+    defaultValues: {
+      title: "",
+      status: "To Do",
+      priority: "Medium",
+    },
+  })
 
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    onSave(data);
-  };
+  const handleSubmit = (data: FormData) => {
+    console.log("New task:", data)
+    onSubmit()
+  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-3">
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="bg-white">
-                  <SelectItem value="To Do">To Do</SelectItem>
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Done">Done</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
+    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <input
+        {...form.register("title")}
+        placeholder="Task Title"
+        className="w-full border px-3 py-2 rounded"
+      />
+      <textarea
+        {...form.register("description")}
+        placeholder="Task Description"
+        className="w-full border px-3 py-2 rounded"
+      />
+        <input
+            type="date"
+            {...form.register("dueDate")}
+            className="w-full border px-3 py-2 rounded"
         />
-
-        <FormField
-          control={form.control}
-          name="priority"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Priority</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select priority" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="bg-white">
-                  <SelectItem value="Low">Low</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="High">High</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
-
-        <div className="flex gap-2">
-          <Button type="submit">Save</Button>
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </Form>
-  );
-};
+      <select {...form.register("status")} className="w-full border px-3 py-2 rounded">
+        <option value="To Do">To Do</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Done">Done</option>
+      </select> 
+      <select {...form.register("priority")} className="w-full border px-3 py-2 rounded">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select> 
+      <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
+        Save Task
+      </button>
+    </form>
+  )
+}

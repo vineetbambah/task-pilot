@@ -1,4 +1,5 @@
 import TaskBoard from "@/app/components/taskboard";
+import NewTask from "@/app/components/newtask";
 export default function Home() {
   return (
    <>
@@ -6,9 +7,7 @@ export default function Home() {
       <h1 className="text-2xl ">
         Task <span className="font-medium text-amber-700">Pilot</span>
       </h1>
-      <button className="bg-gradient-to-r from-amber-800 to-amber-800/90  text-white px-4 py-2 rounded">
-        New Task
-      </button>
+      <NewTask />
    </nav>
    <TaskBoard />
    </>
