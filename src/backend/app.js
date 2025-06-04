@@ -27,7 +27,7 @@ app.post('/api/post', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating your task'});
   }
 });
-app.put('/api/update/:id', async (req, res) => {
+app.post('/api/update/:id', async (req, res) => {
   try {
     const { title, status, description, priority, dueDate } = req.body;
     const updatedTask = await prisma.task.update({
