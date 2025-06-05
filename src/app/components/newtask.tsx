@@ -1,20 +1,34 @@
 'use client';
 
-import { useState } from "react";
-
-import TaskForm from "@/app/components/taskform";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from 'react';
+import { useTaskContext } from '@/context/TaskContext';
+import TaskForm from '@/app/components/taskform';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const NewTask = () => {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { fetchTasks } = useTaskContext();
 
   const handleCreateTask = async (data: any) => {
     setIsSubmitting(true);
     try {
+      const response = await fetch('http://localhost:3001/api/post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create task');
+      }
+
+      await fetchTasks(); // Refresh tasks
       setOpen(false); // Close the dialog
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error('Error creating task:', error);
     } finally {
       setIsSubmitting(false);
     }

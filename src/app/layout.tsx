@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { TaskProvider } from '@/context/TaskContext';
 
 import { Geist_Mono } from "next/font/google";
 
@@ -24,9 +25,7 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} antialiased`}
       >
-       
-          {children}
-        
+        <TaskProvider>{children}</TaskProvider>
       </body>
     </html>
   );
