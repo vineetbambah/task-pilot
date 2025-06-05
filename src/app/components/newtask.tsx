@@ -4,12 +4,21 @@ import { useState } from 'react';
 import { useTaskContext } from '@/context/TaskContext';
 import TaskForm from '@/app/components/taskform';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-
+interface Task {
+  task: {
+    id: string;
+    title: string;
+    description?: string;
+    status: 'ToDo' | 'InProgress' | 'Done';
+    priority: 'Low' | 'Medium' | 'High';
+    dueDate?: string;
+  };
+}
 const NewTask = () => {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { fetchTasks } = useTaskContext();
-
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleCreateTask = async (data: any) => {
     setIsSubmitting(true);
     try {

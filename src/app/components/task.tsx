@@ -19,7 +19,7 @@ interface TaskProps {
 const Task: React.FC<TaskProps> = ({ task }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { fetchTasks } = useTaskContext();
-
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSave = async (data: any) => {
     try {
       const response = await fetch(`http://localhost:3001/api/update/${task.id}`, {
