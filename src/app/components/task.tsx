@@ -19,21 +19,26 @@ interface TaskProps {
 const Task: React.FC<TaskProps> = ({ task }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { fetchTasks } = useTaskContext();
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSave = async (data: any) => {
+  const handleSave = async (data: {
+    title: string;
+    description?: string;
+    status: 'ToDo' | 'InProgress' | 'Done';
+    priority: 'Low' | 'Medium' | 'High';
+    dueDate?: string;
+  }) => {
     try {
       const response = await fetch(`http://localhost:3001/api/update/${task.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, id: task.id }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update task');
       }
-
+  
       await fetchTasks(); 
       setIsEditing(false);
     } catch (error) {

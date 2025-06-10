@@ -4,22 +4,18 @@ import { useState } from 'react';
 import { useTaskContext } from '@/context/TaskContext';
 import TaskForm from '@/app/components/taskform';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-interface Task {
-  task: {
-    id: string;
-    title: string;
-    description?: string;
-    status: 'ToDo' | 'InProgress' | 'Done';
-    priority: 'Low' | 'Medium' | 'High';
-    dueDate?: string;
-  };
+interface TaskData {
+  title: string;
+  description?: string;
+  status: 'ToDo' | 'InProgress' | 'Done';
+  priority: 'Low' | 'Medium' | 'High';
+  dueDate?: string;
 }
 const NewTask = () => {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { fetchTasks } = useTaskContext();
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleCreateTask = async (data: any) => {
+  const handleCreateTask = async (data: TaskData) => {
     setIsSubmitting(true);
     try {
       const response = await fetch('http://localhost:3001/api/post', {
@@ -27,7 +23,7 @@ const NewTask = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ task: data }),
       });
 
       if (!response.ok) {
