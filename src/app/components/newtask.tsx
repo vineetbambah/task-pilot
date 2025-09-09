@@ -18,7 +18,7 @@ const NewTask = () => {
   const handleCreateTask = async (data: TaskData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_TP_API_URL}/post`, {
+      const response = await fetch(`/api/post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

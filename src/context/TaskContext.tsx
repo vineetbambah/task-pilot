@@ -24,7 +24,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_TP_API_URL}/posts`);
+      const response = await fetch(`/api/posts`);
       if (!response.ok) {
         throw new Error('Failed to fetch tasks');
       }
