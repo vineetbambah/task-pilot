@@ -18,12 +18,12 @@ const NewTask = () => {
   const handleCreateTask = async (data: TaskData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('http://localhost:3001/api/post', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_TP_API_URL}/post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ task: data }),
+        body: JSON.stringify( data ),
       });
 
       if (!response.ok) {

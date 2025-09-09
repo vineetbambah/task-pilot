@@ -5,10 +5,10 @@ const app = express();
 const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 
-app.post('/api/post', async (req, res) => {
+app.post('/tp/post', async (req, res) => {
   try {
     const { title, status,description,priority,dueDate } = req.body;
     const post = await prisma.task.create({
@@ -27,7 +27,7 @@ app.post('/api/post', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating your task'});
   }
 });
-app.post('/api/update/:id', async (req, res) => {
+app.post('/tp/update/:id', async (req, res) => {
   try {
     const { title, status, description, priority, dueDate } = req.body;
     const updatedTask = await prisma.task.update({
@@ -48,7 +48,7 @@ app.post('/api/update/:id', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while updating the task' });
   }
 });
-app.get('/api/posts', async (_req,res) => {
+app.get('/tp/posts', async (_req,res) => {
   try {
     const posts = await prisma.task.findMany();
     res.status(200).json(posts);

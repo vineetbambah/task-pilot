@@ -27,7 +27,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     dueDate?: string;
   }) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/update/${task.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_TP_API_URL}/update/${task.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
